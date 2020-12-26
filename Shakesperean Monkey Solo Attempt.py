@@ -3,15 +3,13 @@
 #Calculate fitness
 #Reproduction and mutation
 
-
-
 import random
 import string
 phrase = "To be or not to be that is the question"
 chars = list(string.printable)
 generation = []
 
-#              n = number of species
+#n = number of species
 def runGeneration(n):
     for i in range(n):
         currentPhrase = []
