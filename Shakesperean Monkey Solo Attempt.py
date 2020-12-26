@@ -1,7 +1,9 @@
-#Bandar Al Aish
+#Bandar Al Aish || bandi72006
+
 #To do list:
-#Calculate fitness
-#Reproduction and mutation
+#Fix bugs (no reproduction/changes occuring)!
+#Mutation
+
 
 import random
 import string
@@ -15,11 +17,13 @@ chars.remove("\t")
 chars.remove("\x0b")
 chars.remove("\x0c")
 
-print(chars)
+#Define crucial variables that stores the generations data
 generation = []
+fitnessScores = []
+selections = []
+children = []
 
 print("===============================\n Running code \n===============================")
-
 
 #n = number of species
 def createGeneration(n):
@@ -38,12 +42,8 @@ def createGeneration(n):
     #    print(str(memberCount) + ". " + member)
     #    memberCount += 1
 
-createGeneration(100)
 
 def calcFitness():
-
-    #Every member has a corresponding fitness rank at the same index
-    fitnessRank = []
 
     #calculates individual fitness
     for member in generation:
@@ -51,10 +51,64 @@ def calcFitness():
         for i in range(len(member)):
             if (str(member[i]) == (phrase[i])):
                 fitness = fitness + 1
-        fitnessRank.append(fitness)
+        fitnessScores.append(fitness)
     
-    for i in range(len(generation)):
-        print(generation[i] + " " + str(fitnessRank[i]))
+
+def selection():
+
+    for i in range(0, len(generation), 2):
+        if (fitnessScores[i] >= fitnessScores[i+1]):
+            selections.append(generation[i])
+        else:
+            selections.append(generation[i+1])
+
+
+def reproduce():
+
+    matingPool = []
+    memberCount = 0
+    
+    for i in range(0,len(selections),2):
+        #Adds 2 members at a time to the mating pool        
+        matingPool.append(selections[i])
+        matingPool.append(selections[i+1])
+        
+        #crossover
+
+        crossoverPoint = random.randint(0,len(matingPool[0]))
+        parent1 = list(matingPool[0])
+        parent2 = list(matingPool[1])
+
+        #Creates children by join first part of parent and second part of other parent
+        child1 = "".join(parent1[:crossoverPoint] + parent2[crossoverPoint:])
+        child2 = "".join(parent2[:crossoverPoint] + parent1[crossoverPoint:])
+        
+        children.append(child1)
+        children.append(child2)
         
 
-calcFitness()
+        #clears mating pool for next "pair" of members
+        del matingPool[:]
+    
+    generation = children
+    del children[:]
+
+
+def isPhraseTyped():
+    for member in generation:
+        if member == phrase:
+            return True
+            break
+
+
+createGeneration(100)
+
+while True:
+    calcFitness()
+    selection()
+    reproduce()
+    if isPhraseTyped == True:
+        break
+
+    print(generation)
+        
