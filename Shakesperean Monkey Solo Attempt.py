@@ -7,10 +7,22 @@ import random
 import string
 phrase = "To be or not to be that is the question"
 chars = list(string.printable)
+
+#removes unnecessary characters
+chars.remove("\r")
+chars.remove("\n")
+chars.remove("\t")
+chars.remove("\x0b")
+chars.remove("\x0c")
+
+print(chars)
 generation = []
 
+print("===============================\n Running code \n===============================")
+
+
 #n = number of species
-def runGeneration(n):
+def createGeneration(n):
     for i in range(n):
         currentPhrase = []
         for i in range(len(phrase)):
@@ -19,21 +31,30 @@ def runGeneration(n):
         currentPhrase = "".join(currentPhrase)
         generation.append(currentPhrase)
 
-    #print(currentPhrase)
+    #Prints out every member in generation. Optional and it saves time
 
-runGeneration(100)
+    #memberCount = 0
+    #for member in generation:
+    #    print(str(memberCount) + ". " + member)
+    #    memberCount += 1
+
+createGeneration(100)
 
 def calcFitness():
+
+    #Every member has a corresponding fitness rank at the same index
+    fitnessRank = []
+
+    #calculates individual fitness
     for member in generation:
+        fitness = 0
         for i in range(len(member)):
-            fitness = 0
             if (str(member[i]) == (phrase[i])):
-                print(member[i] + "  " + phrase[i])
                 fitness = fitness + 1
+        fitnessRank.append(fitness)
+    
+    for i in range(len(generation)):
+        print(generation[i] + " " + str(fitnessRank[i]))
         
 
 calcFitness()
-        
-    
-
-
