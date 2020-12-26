@@ -3,6 +3,7 @@
 #To do list:
 #Fix bugs (no reproduction/changes occuring)!
 #Mutation
+#COMMENT CODE SO ITS EASIER TO READ
 
 
 import random
