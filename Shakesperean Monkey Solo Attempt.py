@@ -22,7 +22,6 @@ chars.remove("\x0c")
 generation = []
 fitnessScores = []
 selections = []
-children = []
 
 print("===============================\n Running code \n===============================")
 
@@ -68,7 +67,8 @@ def reproduce():
 
     matingPool = []
     memberCount = 0
-    
+    generation = []
+
     for i in range(0,len(selections),2):
         #Adds 2 members at a time to the mating pool        
         matingPool.append(selections[i])
@@ -84,15 +84,19 @@ def reproduce():
         child1 = "".join(parent1[:crossoverPoint] + parent2[crossoverPoint:])
         child2 = "".join(parent2[:crossoverPoint] + parent1[crossoverPoint:])
         
-        children.append(child1)
-        children.append(child2)
-        
+        generation.append(child1)
+        generation.append(child2)
 
         #clears mating pool for next "pair" of members
-        del matingPool[:]
+        matingPool = []
     
-    generation = children
-    del children[:]
+    
+    children = []
+    for i in range(10):
+        print(str(i) + ":     " + generation[i] + "      fitness:    " + str(fitnessScores[i]))
+
+    print("\n\n\n\n")
+    
 
 
 def isPhraseTyped():
@@ -104,6 +108,7 @@ def isPhraseTyped():
 
 createGeneration(100)
 
+
 while True:
     calcFitness()
     selection()
@@ -111,5 +116,4 @@ while True:
     if isPhraseTyped == True:
         break
 
-    print(generation)
         
