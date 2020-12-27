@@ -2,7 +2,6 @@
 
 #To do list:
 #Fix bugs (no reproduction/changes occuring)!
-#Mutation
 #COMMENT CODE SO ITS EASIER TO READ
 
 
@@ -22,6 +21,7 @@ chars.remove("\x0c")
 generation = []
 fitnessScores = []
 selections = []
+mutationRate = 0.01 #between values of 0 and 1
 
 print("===============================\n Running code \n===============================")
 
@@ -81,9 +81,29 @@ def reproduce():
         parent2 = list(matingPool[1])
 
         #Creates children by join first part of parent and second part of other parent
-        child1 = "".join(parent1[:crossoverPoint] + parent2[crossoverPoint:])
-        child2 = "".join(parent2[:crossoverPoint] + parent1[crossoverPoint:])
+        child1 = parent1[:crossoverPoint] + parent2[crossoverPoint:]
+        child2 = parent2[:crossoverPoint] + parent1[crossoverPoint:]
+
+        #Mutation
+        for i in range(len(child1)):
+            randomNumber = random.randint(0,100)
+            if randomNumber < (mutationRate*100):
+                child1[i] = random.choice(chars)
+                #print(str(randomNumber) + "   " + str(mutationRate*100))
+
+        for i in range(len(child2)):
+            randomNumber = (random.randint(0,1000)/10)
+            if randomNumber < (mutationRate*100):
+                child2[i] = random.choice(chars)
+                #print(str(randomNumber) + "   " + str(mutationRate*100))
         
+        #joins the list into a string
+
+        child1 = "".join(child1)
+        child2 = "".join(child2)
+
+        #adds children to generations
+
         generation.append(child1)
         generation.append(child2)
 
