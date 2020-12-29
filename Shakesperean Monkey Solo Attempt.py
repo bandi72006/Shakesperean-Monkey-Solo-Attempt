@@ -1,8 +1,10 @@
 #Bandar Al Aish || bandi72006
 
 #To do list:
+#Higher fitness = higher chance to be selected for mating pool
 #Fix bugs (no reproduction/changes occuring)!
 #COMMENT CODE SO ITS EASIER TO READ
+
 
 
 import random
@@ -47,20 +49,21 @@ def calcFitness():
 
     #calculates individual fitness
     for member in generation:
+        
         fitness = 0
         for i in range(len(member)):
-            if (str(member[i]) == (phrase[i])):
+            if (str(member[i]) == str(phrase[i])):
                 fitness = fitness + 1
         fitnessScores.append(fitness)
     
 
 def selection():
+    #Creates a list where the higher the fitness, the more times they appear on the list
 
-    for i in range(0, len(generation), 2):
-        if (fitnessScores[i] >= fitnessScores[i+1]):
+    for i in range(len(generation)):
+        for i in range(fitnessScores[i]+1):
             selections.append(generation[i])
-        else:
-            selections.append(generation[i+1])
+
 
 
 def reproduce():
@@ -69,13 +72,12 @@ def reproduce():
     memberCount = 0
     generation = []
 
-    for i in range(0,len(selections),2):
+    for i in range(0,len(selections)):
         #Adds 2 members at a time to the mating pool        
-        matingPool.append(selections[i])
-        matingPool.append(selections[i+1])
+        matingPool.append(random.choice(selections))
+        matingPool.append(random.choice(selections))
         
         #crossover
-
         crossoverPoint = random.randint(0,len(matingPool[0]))
         parent1 = list(matingPool[0])
         parent2 = list(matingPool[1])
@@ -109,10 +111,10 @@ def reproduce():
 
         #clears mating pool for next "pair" of members
         matingPool = []
-    
-    
+
     children = []
-    for i in range(10):
+
+    for i in range(100):
         print(str(i) + ":     " + generation[i] + "      fitness:    " + str(fitnessScores[i]))
 
     print("\n\n\n\n")
