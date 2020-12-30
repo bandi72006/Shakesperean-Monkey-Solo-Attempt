@@ -23,7 +23,8 @@ chars.remove("\x0c")
 generation = []
 fitnessScores = []
 selections = []
-mutationRate = 0.01 #between values of 0 and 1
+mutationRate = 0.1 #between values of 0 and 1
+populationSize = 100
 
 print("===============================\n Running code \n===============================")
 
@@ -60,9 +61,14 @@ def calcFitness():
 def selection():
     #Creates a list where the higher the fitness, the more times they appear on the list
 
-    for i in range(len(generation)):
-        for i in range(fitnessScores[i]+1):
-            selections.append(generation[i])
+    for i in range(0, len(generation), 2):
+        if (fitnessScores[i] >= fitnessScores[i+1]):
+            for i in range(fitnessScores[i]):
+                selections.append(generation[i])
+        else:
+            for i in range(fitnessScores[i+1]):
+                selections.append(generation[i+1])
+            
 
 
 
@@ -72,7 +78,7 @@ def reproduce():
     memberCount = 0
     generation = []
 
-    for i in range(0,len(selections)):
+    for i in range(populationSize):
         #Adds 2 members at a time to the mating pool        
         matingPool.append(random.choice(selections))
         matingPool.append(random.choice(selections))
@@ -128,14 +134,12 @@ def isPhraseTyped():
             break
 
 
-createGeneration(100)
+createGeneration(populationSize)
 
 
 while True:
     calcFitness()
     selection()
     reproduce()
-    if isPhraseTyped == True:
-        break
 
         
