@@ -5,8 +5,6 @@
 #Fix bugs (no reproduction/changes occuring)!
 #COMMENT CODE SO ITS EASIER TO READ
 
-
-
 import random
 import string
 phrase = "To be or not to be that is the question"
@@ -47,38 +45,42 @@ def createGeneration(n):
 
 
 def calcFitness():
-
+    fitnessScores = []
     #calculates individual fitness
     for member in generation:
-        
         fitness = 0
         for i in range(len(member)):
             if (str(member[i]) == str(phrase[i])):
                 fitness = fitness + 1
         fitnessScores.append(fitness)
     
+    return fitnessScores
 
 def selection():
-    #Creates a list where the higher the fitness, the more times they appear on the list
 
-    for i in range(0, len(generation), 2):
+    #MAKE IT SO NO FITNESS SCORES OF 0 ARE ADDED TO SELECTIONS
+
+
+    #Creates a list where the higher the fitness, the more times they appear on the list
+    selections = []
+    for i in range(0, len(generation)-2, 2):
         if (fitnessScores[i] >= fitnessScores[i+1]):
             for i in range(fitnessScores[i]):
                 selections.append(generation[i])
         else:
             for i in range(fitnessScores[i+1]):
                 selections.append(generation[i+1])
-            
+
+    return selections     
 
 
 
 def reproduce():
 
     matingPool = []
-    memberCount = 0
     generation = []
 
-    for i in range(populationSize):
+    for i in range(int(populationSize/2)):
         #Adds 2 members at a time to the mating pool        
         matingPool.append(random.choice(selections))
         matingPool.append(random.choice(selections))
@@ -100,9 +102,10 @@ def reproduce():
                 #print(str(randomNumber) + "   " + str(mutationRate*100))
 
         for i in range(len(child2)):
-            randomNumber = (random.randint(0,1000)/10)
+            randomNumber = (random.randint(0,100)/10)
             if randomNumber < (mutationRate*100):
                 child2[i] = random.choice(chars)
+
                 #print(str(randomNumber) + "   " + str(mutationRate*100))
         
         #joins the list into a string
@@ -117,29 +120,26 @@ def reproduce():
 
         #clears mating pool for next "pair" of members
         matingPool = []
-
-    children = []
-
-    for i in range(100):
-        print(str(i) + ":     " + generation[i] + "      fitness:    " + str(fitnessScores[i]))
-
-    print("\n\n\n\n")
     
+    return generation
+
+    #for i in range(100):
+    #    print(str(i) + ":     " + generation[i] + "      fitness:    " + str(fitnessScores[i]))
+
+    #print("\n\n\n\n")
 
 
 def isPhraseTyped():
     for member in generation:
         if member == phrase:
             return True
-            break
 
 
 createGeneration(populationSize)
 
-
 while True:
-    calcFitness()
-    selection()
-    reproduce()
+    fitnessScores = calcFitness()
+    selections = selection()
+    generation = reproduce()  
 
-        
+    
