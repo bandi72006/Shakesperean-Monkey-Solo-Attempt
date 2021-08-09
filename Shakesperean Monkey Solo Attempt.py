@@ -7,7 +7,9 @@
 
 import random
 import string
-phrase = "To be or not to be that is the question"
+import time
+
+phrase = "peeepeee"
 chars = list(string.printable)
 
 #removes unnecessary characters
@@ -21,7 +23,7 @@ chars.remove("\x0c")
 generation = []
 fitnessScores = []
 selections = []
-mutationRate = 0.1 #between values of 0 and 1
+mutationRate = 0.001 #between values of 0 and 1
 populationSize = 100
 
 print("===============================\n Running code \n===============================")
@@ -30,7 +32,7 @@ print("===============================\n Running code \n========================
 def createGeneration(n):
     for i in range(n):
         currentPhrase = []
-        for i in range(len(phrase)):
+        for j in range(len(phrase)):
             currentPhrase.append(random.choice(chars))
 
         currentPhrase = "".join(currentPhrase)
@@ -58,20 +60,21 @@ def calcFitness():
 
 def selection():
 
-    #MAKE IT SO NO FITNESS SCORES OF 0 ARE ADDED TO SELECTIONS
-
+    #SOMETHING WRONG HERE
+    #MAKE IT SO FITNESS PLAYS A LARGER ROLE
 
     #Creates a list where the higher the fitness, the more times they appear on the list
     selections = []
     for i in range(0, len(generation)-2, 2):
-        if (fitnessScores[i] >= fitnessScores[i+1]):
-            for i in range(fitnessScores[i]):
+        if (fitnessScores[i] == 0 and fitnessScores[i+1] == 1):
+            pass
+        elif (fitnessScores[i] >= fitnessScores[i+1]):
+            for j in range(fitnessScores[i]):
                 selections.append(generation[i])
         else:
-            for i in range(fitnessScores[i+1]):
+            for j in range(fitnessScores[i+1]):
                 selections.append(generation[i+1])
-
-    return selections     
+    return selections  
 
 
 
@@ -129,17 +132,21 @@ def reproduce():
     #print("\n\n\n\n")
 
 
-def isPhraseTyped():
-    for member in generation:
+def isPhraseTyped(gen):
+    for member in gen:
         if member == phrase:
+            print(member)
+            endTime = time.time()
+            print("Total time: ", str(endTime-startTime))
             return True
 
-
+startTime = time.time()
 createGeneration(populationSize)
 
 while True:
     fitnessScores = calcFitness()
     selections = selection()
     generation = reproduce()  
-
-    
+    print(generation)
+    if isPhraseTyped(generation):
+        break
